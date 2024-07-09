@@ -1,13 +1,19 @@
-import os
-from dotenv import load_dotenv
+from src.config import appConfig
+from src.agents import defineAgent
+from src.utils.logger import logging
+from src.utils.exception import customException
 
-def main():
-    load_dotenv()
-    os.environ['LANGCHAIN_TRACING_V2']=os.getenv('LANGCHAIN_TRACING_V2')
-    os.environ['LANGCHAIN_ENDPOINT']=os.getenv('LANGCHAIN_ENDPOINT')
-    os.environ['LANGCHAIN_API_KEY']=os.getenv('LANGCHAIN_API_KEY')
-    os.environ['LANGCHAIN_PROJECT']=os.getenv('LANGCHAIN_PROJECT')
-    os.environ['GOOGLE_API_KEY']=os.getenv('GOOGLE_API_KEY')
+def main(query):
+    """
+    Main function to run the application
+    :param query: query to run the application
+    :return: response from the agent
+    """
+    appConfig.config()
+    agent=defineAgent()
+    response=agent.chat(query)
+    logging.info(f"Answer: {response}")
+
 
 if __name__=="__main__":
-    main()
+    main("what is yolo")

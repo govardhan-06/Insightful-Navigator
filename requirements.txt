@@ -5,4 +5,9 @@ pinecone-client>=3.0.0
 llama-index-llms-gemini
 google-generativeai
 llama-index-vector-stores-pinecone
--e.
+llama-index-embeddings-gemini
+torch 
+transformers 
+python-pptx 
+Pillow
+# -e.

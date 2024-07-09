@@ -22,20 +22,22 @@ class PineConeDB:
     def __init__(self):
         self.config = PineConeDBConfig()
         index_name="userdata"
-        if index_name not in self.pc.list_indexes():
+        if len(list(self.config.pc.list_indexes())) == 0 or index_name != list(self.config.pc.list_indexes())[0]['name']:
             try:
-                self.config.pc.create_index(index_name=index_name, dimension=768, metric="cosine", spec=ServerlessSpec(cloud="aws", region="us-east-1"))
+                self.config.pc.create_index(name=index_name, dimension=768, metric="cosine", spec=ServerlessSpec(cloud="aws", region="us-east-1"))
+            
             except Exception as e:
                 raise customException(e,sys)
         
         else:
-            print(f"Index {index_name} already exists")
+            logging.info(f"Index {index_name} already exists")
 
         self.pinecone_index = self.config.pc.Index(index_name)
 
     def ingest_vectors(self,documents):
         """
-        Ingests the embeddings into Pinecone vector DB
+        Return the index containing the vector embeddings
+        :documents: content from the files provided by the user
         """
         try:
             logging.info("Creating PineCone DB instance...")
