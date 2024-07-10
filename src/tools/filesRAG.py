@@ -6,7 +6,9 @@ import sys
 
 from src.services.pinecone_service import PineConeDB
 from llama_index.core import SimpleDirectoryReader
-from llama_index.core.tools import QueryEngineTool
+from llama_index.core.tools import QueryEngineTool, ToolMetadata
+from llama_index.core.retrievers import VectorIndexRetriever
+from llama_index.core.query_engine import RetrieverQueryEngine
 
 class filesRAG:
     def __init__(self):
@@ -21,17 +23,34 @@ class filesRAG:
             documents=SimpleDirectoryReader("data").load_data()
             obj=PineConeDB()
             index=obj.ingest_vectors(documents)
-            query_engine=index.as_query_engine()
 
-            logging.info("Creating the tool for handling files")
-            files_tool=QueryEngineTool.from_defaults(
-                query_engine,
-                name='files_RAG',
-                description='This tool processes documents from a specified directory, ingests them into Pinecone as vectors, and creates a query engine for retrieving information from the ingested documents efficiently.'
+            # configure retriever
+            retriever = VectorIndexRetriever(
+                index=index,
+                similarity_top_k=5,
             )
 
+            # Retrieve top 5 results
+            results = retriever.retrieve("What is operator overloading?")
+
+            # Print the results
+            for result in results:
+                print(result)
+
+            # # assemble query engine
+            # query_engine = RetrieverQueryEngine(
+            #     retriever=retriever,
+            # )
+
+            # files_tool=QueryEngineTool(query_engine=query_engine,metadata=ToolMetadata(name="file_based_RAG_tool",
+            #                            description=(
+            #                                         "Use a detailed plain text question as input to the tool."
+            #                                        ),
+            #                                 ),
+            #                             )
+
             logging.info("Returned file handling tool")
-            return files_tool
+            # return files_tool
         
         except Exception as e:
             logging.error(e)
