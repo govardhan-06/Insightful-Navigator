@@ -34,8 +34,7 @@ class Agent_Execution:
 
 if __name__=="__main__":
     obj=Agent_Execution()
-    obj.execute_query("What is object overloading?")
+    obj.execute_query("What is yolo?")
     api_key=os.getenv("PINECONE_API_KEY")
     pc = Pinecone(api_key=api_key)
     pc.delete_index("userfiles")
-    pc.delete_index("userwebsites")
