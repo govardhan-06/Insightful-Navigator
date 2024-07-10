@@ -1,7 +1,9 @@
 from src.utils.exception import customException
 from src.utils.logger import logging
+
 import os
 import sys
+import re
 
 from llama_index.core import VectorStoreIndex
 from llama_index.vector_stores.pinecone import PineconeVectorStore
@@ -20,33 +22,107 @@ class PineConeDBConfig:
 class PineConeDB:
     def __init__(self):
         self.config = PineConeDBConfig()
-        index_name="userdata"
-        if len(list(self.config.pc.list_indexes())) == 0 or index_name != list(self.config.pc.list_indexes())[0]['name']:
+        files_index_name="userfiles"
+        web_index_name="userwebsites"
+
+        #Files index
+        if len(list(self.config.pc.list_indexes())) == 0 or files_index_name != list(self.config.pc.list_indexes())[1]['name']:
             try:
-                self.config.pc.create_index(name=index_name, dimension=768, metric="cosine", spec=ServerlessSpec(cloud="aws", region="us-east-1"))
+                self.config.pc.create_index(name=files_index_name, dimension=768, metric="euclidean", spec=ServerlessSpec(cloud="aws", region="us-east-1"))
             
             except Exception as e:
                 raise customException(e,sys)
         
         else:
-            logging.info(f"Index {index_name} already exists")
+            logging.info(f"Index {files_index_name} already exists")
+        
+        #Website index
+        if len(list(self.config.pc.list_indexes())) == 0 or web_index_name != list(self.config.pc.list_indexes())[0]['name']:
+            try:
+                self.config.pc.create_index(name=web_index_name, dimension=768, metric="euclidean", spec=ServerlessSpec(cloud="aws", region="us-east-1"))
+            
+            except Exception as e:
+                raise customException(e,sys)
+        
+        else:
+            logging.info(f"Index {web_index_name} already exists")
 
-        self.pinecone_index = self.config.pc.Index(index_name)
+        self.pinecone_index_files = self.config.pc.Index(files_index_name)
+        self.pinecone_index_web = self.config.pc.Index(web_index_name)
 
-    def ingest_vectors(self,documents):
+
+    def clean_up_text(self,content: str) -> str:
+        """
+        Remove unwanted characters and patterns in text input.
+
+        :param content: Text input.
+        
+        :return: Cleaned version of original text input.
+        """
+
+        # Fix hyphenated words broken by newline
+        content = re.sub(r'(\w+)-\n(\w+)', r'\1\2', content)
+
+        # Remove specific unwanted patterns and characters
+        unwanted_patterns = [
+            "\\n", "  —", "——————————", "—————————", "—————",
+            r'\\u[\dA-Fa-f]{4}', r'\uf075', r'\uf0b7'
+        ]
+        for pattern in unwanted_patterns:
+            content = re.sub(pattern, "", content)
+
+        # Fix improperly spaced hyphenated words and normalize whitespace
+        content = re.sub(r'(\w)\s*-\s*(\w)', r'\1-\2', content)
+        content = re.sub(r'\s+', ' ', content)
+
+        return content
+
+    def clean_up_docs(self,documents):
+        """
+        Clean up documents before indexing them.
+        :param documents: Documents read from the files
+        :return: Cleaned documents
+        """
+        cleaned_docs = []
+        for d in documents: 
+            cleaned_text = self.clean_up_text(d.text)
+            d.text = cleaned_text
+            cleaned_docs.append(d)
+        return cleaned_docs
+
+    def ingest_vectors(self,documents,content_type):
         """
         Return the index containing the vector embeddings
-        :documents: content from the files provided by the user
+        :param documents: content from the files provided by the user
+        :param content_type: type of content (files or web)
+        :return: index containing the vector embeddings
         """
         try:
-            logging.info("Creating PineCone DB instance...")
-            vector_store = PineconeVectorStore(pinecone_index=self.pinecone_index)
-            storage_context = StorageContext.from_defaults(vector_store=vector_store)
-            index = VectorStoreIndex.from_documents(
-            documents, storage_context=storage_context
-            )
-            logging.info("Successfully, pushed the embeddings to pinecone DB")
-            return index
+            logging.info("Creating PineCone DB instances...")
+            cleaned_docs=self.clean_up_docs(documents)
+
+            if content_type=="files":
+                files_vector_store = PineconeVectorStore(pinecone_index=self.pinecone_index_files)
+                files_storage_context = StorageContext.from_defaults(vector_store=files_vector_store)
+
+                file_index = VectorStoreIndex.from_documents(
+                cleaned_docs, storage_context=files_storage_context
+                )
+                logging.info("Successfully, pushed file data embeddings to pinecone DBs")
+
+                return file_index
+
+            elif content_type=="websites":
+                web_vector_store = PineconeVectorStore(pinecone_index=self.pinecone_index_web)
+                web_storage_context = StorageContext.from_defaults(vector_store=web_vector_store)
+
+                web_index = VectorStoreIndex.from_documents(
+                cleaned_docs, storage_context=web_storage_context
+                )
+                logging.info("Successfully, pushed website data embeddings to pinecone DBs")
+                
+                return web_index
+            
         except Exception as e:
             logging.error(e)
             raise customException(e,sys)

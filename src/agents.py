@@ -16,9 +16,11 @@ def defineAgent():
     
     try:
         logging.info("Creating the agent")
+        filetool=filesRAG()
+        webtool=webRAG()
         agent=ReActAgent.from_tools(
-            tools=[filesRAG.process_files(),
-                   webRAG.process_Websites()],
+            tools=[filetool.process_files(),
+                   webtool.process_Websites()],
             verbose=True
         )
         return agent

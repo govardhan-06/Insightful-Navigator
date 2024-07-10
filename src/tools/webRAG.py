@@ -13,17 +13,19 @@ class webRAG:
     def __init__(self):
         pass
 
-    def process_Websites(websites:list = ["https://en.wikipedia.org/wiki/SpaceX"]):
+    def process_Websites(websites:list = ["https://en.wikipedia.org/wiki/SpaceX",
+                                          "https://en.wikipedia.org/wiki/ISRO"]):
         """
         Returns a webRAG tool used to read the websites
         :param websites: list of websites to be read
         """
         try:
             logging.info("Reading the website")
+            websites=["https://en.wikipedia.org/wiki/SpaceX","https://en.wikipedia.org/wiki/ISRO"]
             documents = SimpleWebPageReader(html_to_text=True).load_data(websites)
             logging.info(documents[0])
             obj=PineConeDB()
-            index=obj.ingest_vectors(documents)
+            index=obj.ingest_vectors(documents,"websites")
             query_engine=index.as_query_engine()
 
             logging.info("Creating the tool for handling files")

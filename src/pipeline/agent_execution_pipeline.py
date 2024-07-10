@@ -33,5 +33,3 @@ class Agent_Execution:
 if __name__=="__main__":
     obj=Agent_Execution()
     obj.execute_query("What is yolo?")
-    print("Next Question")
-    obj.execute_query("What is SpaceX?")
