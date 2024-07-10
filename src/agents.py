@@ -1,6 +1,7 @@
 from src.utils.logger import logging
 from src.utils.exception import customException
 from src.tools.filesRAG import filesRAG
+from src.tools.webRAG import webRAG
 from llama_index.core.agent import ReActAgent
 
 import os,sys
@@ -16,7 +17,8 @@ def defineAgent():
     try:
         logging.info("Creating the agent")
         agent=ReActAgent.from_tools(
-            tools=[filesRAG.process()],
+            tools=[filesRAG.process_files(),
+                   webRAG.process_Websites()],
             verbose=True
         )
         return agent

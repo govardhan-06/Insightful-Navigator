@@ -6,8 +6,6 @@ llama-index-llms-gemini
 google-generativeai
 llama-index-vector-stores-pinecone
 llama-index-embeddings-gemini
-torch 
-transformers 
-python-pptx 
-Pillow
+llama-index-readers-web
+browserbase
 # -e.
