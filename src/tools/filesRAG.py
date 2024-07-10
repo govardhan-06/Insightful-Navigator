@@ -21,7 +21,6 @@ class filesRAG:
             documents=SimpleDirectoryReader("data").load_data()
             obj=PineConeDB()
             index=obj.ingest_vectors(documents,"files")
-            logging.info(index)
             query_engine=index.as_query_engine()
 
             logging.info("Creating the tool for handling files")
