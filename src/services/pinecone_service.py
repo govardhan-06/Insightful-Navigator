@@ -1,6 +1,5 @@
 from src.utils.exception import customException
 from src.utils.logger import logging
-from dotenv import load_dotenv
 import os
 import sys
 

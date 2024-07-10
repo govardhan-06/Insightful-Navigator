@@ -7,21 +7,22 @@ import sys
 from llama_index.core import Settings
 from llama_index.llms.gemini import Gemini
 from llama_index.embeddings.gemini import GeminiEmbedding
+from llama_index.core import set_global_handler
 
 class appConfig:
     def __init__(self):
+        os.environ['LANGFUSE_SECRET_KEY']=os.getenv("LANGFUSE_SECRET_KEY")
+        os.environ['LANGFUSE_PUBLIC_KEY']=os.getenv("LANGFUSE_PUBLIC_KEY")
+        os.environ['LANGFUSE_HOST']=os.getenv("LANGFUSE_HOST")
         os.environ['GOOGLE_API_KEY']=os.getenv('GOOGLE_API_KEY')
 
     def config():
         """
-        Configures the LLM and Embedding settings of LlamaIndex and enables Langsmith tracing
+        Configures the LLM and Embedding settings of LlamaIndex and enables Langfuse tracing
         """
         try:
-            logging.info("Initiating Langsmith tracing")
-            os.environ['LANGCHAIN_TRACING_V2']=os.getenv('LANGCHAIN_TRACING_V2')
-            os.environ['LANGCHAIN_ENDPOINT']=os.getenv('LANGCHAIN_ENDPOINT')
-            os.environ['LANGCHAIN_API_KEY']=os.getenv('LANGCHAIN_API_KEY')
-            os.environ['LANGCHAIN_PROJECT']=os.getenv('LANGCHAIN_PROJECT')
+            logging.info("Initiating Langfuse tracing")
+            set_global_handler("langfuse")
             
             logging.info("Configuring llm and embedding settings of llamaindex")
             Settings.llm = Gemini(model="models/gemini-pro",temperature=0.0)
