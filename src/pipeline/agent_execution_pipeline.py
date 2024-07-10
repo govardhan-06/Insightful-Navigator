@@ -30,3 +30,7 @@ class Agent_Execution:
         logging.info("Querying the agent")
         response=self.agent.chat(query)
         return response
+
+if __name__=="__main__":
+    obj=Agent_Execution()
+    obj.execute_query("What is yolo?")

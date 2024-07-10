@@ -1,9 +1,7 @@
 import chromadb
-from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
+from llama_index.core import VectorStoreIndex
 from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.core import StorageContext
-
-from src.config import appConfig
 
 class ChromaDB:
     def __init__(self):
@@ -25,11 +23,16 @@ class ChromaDB:
 
         return files_index
     
-    def chroma_websites(self):
-        pass
+    def chroma_websites(self,docs):
+        """
+        Returns vector store index after push the website embeddings to chromaDB
+        :docs :documents extracted from the files
+        """
+        web_vector_store = ChromaVectorStore(chroma_collection=self.web_chroma_collection)
+        web_storage_context = StorageContext.from_defaults(vector_store=web_vector_store)
 
-if __name__=="__main__":
-    app=appConfig()
-    app.config()
-    db = ChromaDB()
-    db.process_files()
+        web_index = VectorStoreIndex.from_documents(
+            docs, storage_context=web_storage_context
+        )
+
+        return web_index

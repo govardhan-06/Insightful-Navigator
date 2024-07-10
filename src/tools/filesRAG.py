@@ -24,11 +24,6 @@ class filesRAG:
             query_engine = files_index.as_query_engine()
 
             logging.info("Creating the tool for handling files")
-            files_tool=QueryEngineTool.from_defaults(
-                query_engine,
-                name='files_RAG',
-                description='This tool processes documents from a specified directory, ingests them into Pinecone as vectors, and creates a query engine for retrieving information from the ingested documents efficiently.'
-            )
 
             files_tool=QueryEngineTool(query_engine=query_engine,metadata=ToolMetadata(name="file_based_RAG_tool",
                                        description=(
