@@ -6,6 +6,5 @@ google-generativeai
 llama-index-vector-stores-pinecone
 llama-index-embeddings-gemini
 llama-index-readers-web
-browserbase
 llama-index-callbacks-langfuse
 # -e.

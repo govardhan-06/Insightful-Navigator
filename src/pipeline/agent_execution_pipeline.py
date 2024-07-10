@@ -4,15 +4,22 @@ from src.utils.logger import logging
 from src.utils.exception import customException
 from dotenv import load_dotenv
 
+import os
+import sys
+
 class Agent_Execution:
     """
     This class is used to execute the agent on a query from the user
     """
     def __init__(self):
         load_dotenv()
-        appConfig.config()
-        self.agent=defineAgent()
-        
+        try:
+            appConfig.config()
+            self.agent=defineAgent()
+        except Exception as e:
+            logging.error(e)
+            raise customException(e,sys)
+
     def execute_query(self,query):
         """
         Main function to run the application

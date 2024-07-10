@@ -6,13 +6,12 @@ import sys
 
 from src.services.pinecone_service import PineConeDB
 from llama_index.core import SummaryIndex
-from llama_index.readers.web import BrowserbaseWebReader
+from llama_index.readers.web import SimpleWebPageReader
 from llama_index.core.tools import QueryEngineTool
 
 class webRAG:
     def __init__(self):
-        os.environ["BROWSERBASE_API_KEY"]=os.getenv("BROWSERBASE_API_KEY")
-        os.environ["BROWSERBASE_PROJECT_ID"]=os.getenv("BROWSERBASE_PROJECT_ID")
+        pass
 
     def process_Websites(websites:list = ["https://en.wikipedia.org/wiki/SpaceX"]):
         """
@@ -21,8 +20,8 @@ class webRAG:
         """
         try:
             logging.info("Reading the website")
-            reader = BrowserbaseWebReader() 
-            documents = reader.load_data(urls=websites,text_content=True)
+            documents = SimpleWebPageReader(html_to_text=True).load_data(websites)
+            logging.info(documents[0])
             obj=PineConeDB()
             index=obj.ingest_vectors(documents)
             query_engine=index.as_query_engine()
