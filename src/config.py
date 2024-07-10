@@ -16,7 +16,7 @@ class appConfig:
         os.environ['LANGFUSE_HOST']=os.getenv("LANGFUSE_HOST")
         os.environ['GOOGLE_API_KEY']=os.getenv('GOOGLE_API_KEY')
 
-    def config():
+    def config(self):
         """
         Configures the LLM and Embedding settings of LlamaIndex and enables Langfuse tracing
         """
