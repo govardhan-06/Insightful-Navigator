@@ -1,6 +1,6 @@
-from src.utils.logger import logging
-from src.utils.exception import customException
-from src.tools.filesRAG import filesRAG
+from backend.src.utils.logger import logging
+from backend.src.utils.exception import customException
+from backend.src.tools.filesRAG import filesRAG
 from llama_index.core.agent import ReActAgent
 
 import os,sys

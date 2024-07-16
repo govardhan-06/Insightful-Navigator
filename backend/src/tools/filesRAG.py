@@ -1,10 +1,10 @@
-from src.utils.exception import customException
-from src.utils.logger import logging
+from backend.src.utils.exception import customException
+from backend.src.utils.logger import logging
 
 import os
 import sys
 
-from src.services.pinecone_service import PineConeDB
+from backend.src.services.pinecone_service import PineConeDB
 from llama_index.core import SimpleDirectoryReader
 from llama_index.core.tools import QueryEngineTool, ToolMetadata
 from llama_index.core.retrievers import VectorIndexRetriever
@@ -32,7 +32,6 @@ class filesRAG:
 
             # Retrieve top 5 results
             results = retriever.retrieve("What is operator overloading?")
-
             # Print the results
             for result in results:
                 print(result)

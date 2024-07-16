@@ -1,5 +1,5 @@
-from src.utils.exception import customException
-from src.utils.logger import logging
+from backend.src.utils.exception import customException
+from backend.src.utils.logger import logging
 
 import os
 import sys

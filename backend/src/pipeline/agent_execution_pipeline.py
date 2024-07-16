@@ -1,9 +1,9 @@
-from src.config import appConfig
-from src.agents import defineAgent
-from src.utils.logger import logging
-from src.utils.exception import customException
+from backend.src.config import appConfig
+from backend.src.agents import defineAgent
+from backend.src.utils.logger import logging
+from backend.src.utils.exception import customException
 from dotenv import load_dotenv
-from src.services.pinecone_service import PineConeDB
+from backend.src.services.pinecone_service import PineConeDB
 from pinecone import Pinecone
 
 import os
