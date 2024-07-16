@@ -16,7 +16,8 @@ class Agent_Execution:
     def __init__(self):
         load_dotenv()
         try:
-            appConfig.config()
+            app=appConfig()
+            app.config()
             self.agent=defineAgent()
         except Exception as e:
             logging.error(e)

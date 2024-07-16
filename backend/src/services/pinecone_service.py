@@ -28,7 +28,7 @@ class PineConeDB:
 
         if len(list(self.config.pc.list_indexes())) == 0 or files_index_name not in [i['name'] for i in l]:
             try:
-                self.config.pc.create_index(name=files_index_name, dimension=768, metric="euclidean", spec=ServerlessSpec(cloud="aws", region="us-east-1"))
+                self.config.pc.create_index(name=files_index_name, dimension=1024, metric="euclidean", spec=ServerlessSpec(cloud="aws", region="us-east-1"))
             
             except Exception as e:
                 raise customException(e,sys)

@@ -31,7 +31,7 @@ class filesRAG:
             )
 
             # Retrieve top 5 results
-            results = retriever.retrieve("What is operator overloading?")
+            results = retriever.retrieve("What is yolo ?")
             # Print the results
             for result in results:
                 print(result)
