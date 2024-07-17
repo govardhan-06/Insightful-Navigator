@@ -4,9 +4,8 @@ pinecone-client>=3.0.0
 llama-index-llms-gemini
 google-generativeai
 llama-index-vector-stores-pinecone
-llama-index-embeddings-gemini
-llama-index-readers-web
 llama-index-callbacks-langfuse
 llama-index-llms-cohere
 llama-index-embeddings-cohere
+fastapi
 # -e.

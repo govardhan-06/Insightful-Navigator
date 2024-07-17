@@ -104,3 +104,6 @@ class PineConeDB:
         except Exception as e:
             logging.error(e)
             raise customException(e,sys)
+    
+    def destroyIndex(self):
+        self.config.pc.delete_index('userfiles')

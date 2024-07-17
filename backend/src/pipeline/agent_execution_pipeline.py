@@ -27,7 +27,7 @@ class Agent_Execution:
         """
         Main function to run the application
         :param query: query to run the application
-        :return: response from the agent
+        :return: response from the chat_engine
         """
         logging.info("Querying the agent")
         response=self.agent.chat(query)
@@ -35,7 +35,6 @@ class Agent_Execution:
 
 if __name__=="__main__":
     obj=Agent_Execution()
-    obj.execute_query("What is yolo?")
-    api_key=os.getenv("PINECONE_API_KEY")
-    pc = Pinecone(api_key=api_key)
-    pc.delete_index("userfiles")
+    obj.execute_query("Hey How are you?")
+    obj.execute_query('What is yolo?')
+    obj.execute_query('Can you give me an entire summary of the document')
