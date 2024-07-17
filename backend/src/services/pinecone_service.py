@@ -106,4 +106,7 @@ class PineConeDB:
             raise customException(e,sys)
     
     def destroyIndex(self):
+        '''
+        Destroy the pinecone index after the user finishes to query the document
+        '''
         self.config.pc.delete_index('userfiles')

@@ -21,7 +21,7 @@ class filesRAG:
             obj=PineConeDB()
             index=obj.ingest_vectors(documents)
             memory = ChatMemoryBuffer.from_defaults(token_limit=3900)
-            files_chat = index.as_chat_engine(chat_mode="best", memory=memory,verbose=True)
+            files_chat = index.as_chat_engine(chat_mode="best",verbose=True)
 
             logging.info("Returned fileRAG chat engine")
             return files_chat
