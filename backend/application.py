@@ -49,7 +49,7 @@ async def userFileUpload(file: UploadFile):
     else:
         return {"message":"File upload failed"}
 
-@app.post('/filedownload')
+@app.post('/filedownload/{fileID}')
 async def userFileDownload(fileID:str):
     gdrive_obj=GoogleDrive()
     file_location=gdrive_obj.download_file(fileID)
