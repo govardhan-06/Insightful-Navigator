@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import axios from '../../constants/axios'
+import axios from 'axios';
 
 function backendResponse(props) {
   const [response,setResponse]=useState("");
