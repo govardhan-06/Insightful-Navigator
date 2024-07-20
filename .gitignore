@@ -164,3 +164,5 @@ cython_debug/
 
 data/
 gen-lang-client-0892832268-b56b19aefeeb.json
+package-lock.json
+node_modules/

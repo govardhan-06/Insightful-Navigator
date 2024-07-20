@@ -1,12 +1,13 @@
-import { useState } from 'react'
-import './App.css'
+import { useState } from 'react';
+import './App.css';
+import Filehandler from './components/filehandler';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <div>
       <h1>Insightful Navigator</h1>
+      <h2>Upload your file</h2>
+      <Filehandler />
     </div>
   )
 }

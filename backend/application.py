@@ -6,7 +6,18 @@ from backend.src.services.pinecone_service import PineConeDB
 from backend.src.services.google_drive import GoogleDrive
 from backend.src.utils.logger import logging
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app=FastAPI()
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 #Declaring variables globally
 obj=None
